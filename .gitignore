@@ -1,0 +1,28 @@
+# Large project data and outputs (stored separately on Google Drive)
+project/data/
+project/gan-training-runs/
+project/synthetic-images/
+project/classifier-runs/
+
+# FYP report (stored separately on Google Drive)
+REPORT/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

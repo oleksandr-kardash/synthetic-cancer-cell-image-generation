@@ -1,0 +1,27 @@
+Authenticity Check Results (Alaa et al., 2022)
+============================================================
+Generated images: 1000
+Training images:  7728
+
+Standard (excluding self only, as in Alaa et al.):
+  Authenticity:  0.8900
+  Unauthentic:   110 / 1000
+
+Strict (excluding same-source crops, BreaKHis adaptation):
+  Authenticity:  0.8650
+  Unauthentic:   135 / 1000
+
+Generated→Real NN distances:
+  min:    10.3878
+  median: 16.2994
+  mean:   16.5996
+
+Real→Real NN distances (standard, excluding self):
+  min:    5.3900
+  median: 15.0503
+  mean:   15.4323
+
+Real→Real NN distances (strict, excluding same source):
+  min:    5.3900
+  median: 15.4063
+  mean:   15.7530
