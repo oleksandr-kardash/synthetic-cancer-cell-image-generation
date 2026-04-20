@@ -24,15 +24,15 @@ The repository is a fork of NVIDIA's [StyleGAN3 codebase](README-stylegan3.md); 
 ## Prerequisites
 
 - Linux system with an NVIDIA GPU (≥12 GB VRAM recommended)
-- CUDA toolkit and GCC 7+ for compiling custom ops in `torch_utils/ops/`
+- CUDA toolkit 13.x and GCC 7+ for compiling custom ops in `torch_utils/ops/`
 - Python 3.11
 - `uv` package manager ([installation guide](https://docs.astral.sh/uv/getting-started/installation/))
 
 ## Installation
 
 ```bash
-git clone <repository-url> stylegan3-copy
-cd stylegan3-copy
+git clone git@github.com:oleksandr-kardash/synthetic-cancer-cell-image-generation.git
+cd synthetic-cancer-cell-image-generation
 uv venv
 source .venv/bin/activate
 uv sync
@@ -42,7 +42,7 @@ All subsequent commands assume the virtual environment is activated and the work
 
 ## Data setup
 
-Raw datasets and large output artefacts are not tracked in git. Download the following from the project's Google Drive archive and place them at the indicated paths:
+Raw datasets and large output artefacts are not tracked in git. Download the following from the project's [Google Drive archive](https://drive.google.com/drive/folders/1dRtS0waODSi6gWhtrvnM8TBebnjCbl9I?usp=drive_link) and place them at the indicated paths:
 
 ```
 project/data/BreaKHis_v1/                             # raw BreaKHis dataset (as downloaded from https://web.inf.ufpr.br/vri/databases/breast-cancer-histopathological-database-breakhis/)
@@ -201,7 +201,7 @@ All classifier runs use the shared `train_classifier.py` under `project/pipeline
 
 ## Report
 
-The full FYP report discussing methodology, results, and the indirect data leakage finding is kept separately on Google Drive alongside the raw data and training artefacts.
+The full FYP report discussing methodology, results, and the indirect data leakage finding is kept separately on [Google Drive](https://drive.google.com/drive/folders/1dRtS0waODSi6gWhtrvnM8TBebnjCbl9I?usp=drive_link) alongside the raw data and training artefacts.
 
 ## Credits
 
