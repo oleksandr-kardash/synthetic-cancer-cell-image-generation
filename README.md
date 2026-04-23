@@ -1,6 +1,6 @@
 # Synthetic Cancer Cell Image Generation
 
-Final Year Project investigating whether GAN-generated synthetic histopathology images can improve downstream binary classification of breast cancer tissue as benign or malignant. A conditional StyleGAN2-ADA model is trained separately on each BreaKHis magnification level (40x, 100x, 200x, 400x), and the 40x synthetic outputs are used in a series of classifier experiments that isolate the effect of indirect data leakage through the GAN.
+Final Year Project investigating whether GAN-generated synthetic histopathology images can improve downstream binary classification of breast cancer tissue as benign or malignant. A conditional StyleGAN2-ADA model is trained separately on each BreaKHis magnification level (40x, 100x, 200x, 400x), and the 40x synthetic outputs are used in a series of classifier experiments culminating in a controlled evaluation of whether synthetic-augmentation gains depend on the GAN having seen the test patients.
 
 The repository is a fork of NVIDIA's [StyleGAN3 codebase](README-stylegan3.md); the original upstream code lives at the repository root (`train.py`, `gen_images.py`, `dnnlib/`, `training/`, etc.) and all project-specific additions live under `project/`.
 
@@ -187,8 +187,8 @@ bash project/pipeline/03-classifier-experiments/02-split-40-20-40/run_40_20_40_e
 # 5.3 5-fold patient-level stratified cross-validation
 bash project/pipeline/03-classifier-experiments/03-cross-validation/run_cv_experiments.sh
 
-# 5.4 Controlled A/B leakage experiment
-bash project/pipeline/03-classifier-experiments/04-gan-leakage/run_gan_leakage_experiments.sh
+# 5.4 Controlled A/B GAN-seen vs GAN-unseen evaluation
+bash project/pipeline/03-classifier-experiments/04-gan-seen-unseen/run_gan_seen_unseen_experiments.sh
 ```
 
 All classifier runs use the shared `train_classifier.py` under `project/pipeline/03-classifier-experiments/`. Outputs (`results.json`, per-class metrics, training logs) are written to `project/classifier-runs/40x/<experiment-name>/`.
@@ -201,7 +201,7 @@ All classifier runs use the shared `train_classifier.py` under `project/pipeline
 
 ## Report
 
-The full FYP report discussing methodology, results, and the indirect data leakage finding is kept separately on [Google Drive](https://drive.google.com/drive/folders/1dRtS0waODSi6gWhtrvnM8TBebnjCbl9I?usp=drive_link) alongside the raw data and training artefacts.
+The full FYP report discussing methodology, results, and the GAN-seen vs GAN-unseen evaluation is kept separately on [Google Drive](https://drive.google.com/drive/folders/1dRtS0waODSi6gWhtrvnM8TBebnjCbl9I?usp=drive_link) alongside the raw data and training artefacts.
 
 ## Credits
 

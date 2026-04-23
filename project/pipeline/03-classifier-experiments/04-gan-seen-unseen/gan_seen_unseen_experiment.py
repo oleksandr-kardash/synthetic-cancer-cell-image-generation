@@ -1,10 +1,10 @@
 """
-GAN data leakage experiment.
+GAN-seen vs GAN-unseen evaluation.
 
-Tests whether synthetic data improvement is genuine or caused by indirect
-data leakage through the GAN. The GAN was trained on 57 patients (GAN-seen)
-from the original 70/15/15 split. The remaining 24 patients (GAN-unseen)
-were never seen by the GAN.
+Tests whether synthetic-augmentation gains depend on whether the test
+patients were seen by the GAN during its training. The GAN was trained on
+57 patients (GAN-seen) from the original 70/15/15 split. The remaining 24
+patients (GAN-unseen) were never seen by the GAN.
 
 This experiment isolates one variable: are the test patients GAN-seen or
 GAN-unseen? Everything else is kept as similar as possible — both
@@ -21,8 +21,10 @@ Experiment B (GAN-unseen test):
   - Val: GAN-seen patients only
   - Train: remaining GAN-seen patients
 
-If synthetic data genuinely helps, both experiments should show improvement.
-If the improvement is from leakage, only Experiment A should benefit.
+If synthetic augmentation generalises uniformly, both experiments should
+show similar improvement. If the benefit depends on whether the test
+patients were in the GAN's training pool, only Experiment A should
+benefit.
 
 Both experiments run real-only and real+synthetic, then compare.
 Synthetic balancing is handled by train_classifier.py via --synth-malignant.
@@ -36,8 +38,8 @@ Steps:
   6. Compare results
 
 Usage (from project root):
-    python project/pipeline/03-classifier-experiments/04-gan-leakage/gan_leakage_experiment.py \
-        --outdir project/classifier-runs/40x/gan-leakage-experiment \
+    python project/pipeline/03-classifier-experiments/04-gan-seen-unseen/gan_seen_unseen_experiment.py \
+        --outdir project/classifier-runs/40x/gan-seen-unseen-experiment \
         --data-dir project/data/breakhis_no_SOB_M_DC-14-13412_stratified_split_70_15_15_organised_by_mag_256_crops/40X \
         --split-file project/data/breakhis_no_SOB_M_DC-14-13412_stratified_split_70_15_15.txt \
         --synthetic-dir project/synthetic-images/40x-snapshot-008800
@@ -73,7 +75,8 @@ class TeeOutput:
 # CLI arguments
 # -------------------------------------------------------------------------
 parser = argparse.ArgumentParser(
-    description="Data leakage demonstration: GAN-seen vs GAN-unseen test patients"
+    description="GAN-seen vs GAN-unseen evaluation: compares synthetic-augmentation "
+                "gains when test patients were or were not part of the GAN's training pool"
 )
 parser.add_argument("--outdir", required=True,
                     help="Output directory for experiment results")
@@ -313,7 +316,7 @@ for exp_name in ["gan-seen-test", "gan-unseen-test"]:
 # Step 6: Compare results
 # -------------------------------------------------------------------------
 print("\n" + "=" * 70)
-print("LEAKAGE EXPERIMENT RESULTS")
+print("GAN-SEEN VS GAN-UNSEEN EVALUATION RESULTS")
 print("=" * 70)
 
 for exp_name, label in [("gan-seen-test", "Experiment A: GAN-SEEN test patients"),

@@ -5,8 +5,8 @@ Uses the PyTorch tutorial baseline (train_classifier.py) with no
 hyperparameter modifications. Runs each fold real-only and real+synthetic,
 then reports mean +/- std across folds.
 
-Also analyses GAN data leakage: for each fold, reports how many test and
-val patients were in the original GAN training set, and correlates this
+Also analyses GAN-seen patient overlap: for each fold, reports how many test
+and val patients were in the original GAN training set, and correlates this
 with the synthetic data improvement per fold.
 
 Steps:
@@ -18,7 +18,7 @@ Steps:
   6. Create symlinked directory structures for real data
   7. Run train_classifier.py on each fold (real-only and real+synthetic)
      Synthetic balancing is handled by train_classifier.py via --synth-malignant
-  8. Aggregate results and analyse GAN leakage
+  8. Aggregate results and record GAN-seen patient overlap per fold
 
 Usage (from project root):
     python project/pipeline/03-classifier-experiments/03-cross-validation/cross_validation.py \
@@ -76,8 +76,9 @@ parser.add_argument("--split-file", required=True,
                          "to define the GAN's training set. Each line has the "
                          "format: filename|magnification|split. Patients with "
                          "split=train are considered 'GAN-seen' (the GAN was "
-                         "trained on their images). This is used for the data "
-                         "leakage analysis — it does NOT affect fold assignment.")
+                         "trained on their images). This is used for the "
+                         "GAN-seen overlap analysis — it does NOT affect fold "
+                         "assignment.")
 parser.add_argument("--synthetic-dir", default=None,
                     help="Path to GAN-generated synthetic images with class "
                          "subfolders (e.g. {synthetic-dir}/{benign,malignant}/*.png). "
@@ -364,17 +365,17 @@ for mode in ["real_only", "real_and_synthetic"]:
     }
 
 # -------------------------------------------------------------------------
-# Step 6: GAN leakage analysis
+# Step 6: GAN-seen patient overlap analysis
 # -------------------------------------------------------------------------
 print("\n" + "=" * 70)
-print("GAN DATA LEAKAGE ANALYSIS")
+print("GAN-SEEN PATIENT OVERLAP ANALYSIS")
 print("=" * 70)
 print("\nFor each fold, how many test/val patients were in the GAN's training set:")
 print(f"{'Fold':>4s}  {'Test GAN-seen':>13s}  {'Test unseen':>11s}  "
       f"{'Val GAN-seen':>12s}  {'Val unseen':>10s}  {'Synth improvement':>17s}")
 print("-" * 75)
 
-leakage_info = []
+overlap_info = []
 
 for i in range(K):
     test_idx = i
@@ -404,7 +405,7 @@ for i in range(K):
           f"{val_gan_unseen:>4d}/{len(val_pats):<5d}  "
           f"{diff_str:>11s}")
 
-    fold_leakage = {
+    fold_overlap = {
         "test_total": len(test_pats),
         "test_gan_seen": test_gan_seen,
         "test_gan_unseen": test_gan_unseen,
@@ -415,10 +416,10 @@ for i in range(K):
         "val_gan_unseen": val_gan_unseen,
         "synth_improvement": synth_diff,
     }
-    leakage_info.append(fold_leakage)
+    overlap_info.append(fold_overlap)
 
-# Add leakage info to summary
-summary["leakage_analysis"] = leakage_info
+# Add overlap info to summary
+summary["gan_seen_overlap"] = overlap_info
 
 # Save summary
 summary_path = os.path.join(CV_BASE, "cv_summary.json")
